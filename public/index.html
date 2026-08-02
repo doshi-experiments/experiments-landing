@@ -23,11 +23,24 @@
 <title>Experiments — Rishabh Doshi</title>
 <meta name="description" content="The experiments wing: calculators, tools and visualizations built by Rishabh Doshi. An index sheet of things made for the sake of making them.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230f2c4c'/%3E%3Cpath d='M0 10.5h32M0 21.5h32M10.5 0v32M21.5 0v32' stroke='%237fd4ff' stroke-opacity='.35' stroke-width='1'/%3E%3Cpath d='M6 24 16 8l10 16' fill='none' stroke='%23ffb277' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E">
+<!-- Theme is stamped on <html> before the first paint, from a cookie
+     scoped to .rishabhdoshi.com so the choice made on any one of the
+     three sites carries to the others. Same script as Sheet A-001. -->
+<script>
+(function(){
+  var m=document.cookie.match(/(?:^|;\s*)sheet-theme=(light|dark)/),t=m&&m[1];
+  if(!t){ try{ t=localStorage.getItem('sheet-theme'); }catch(e){} }
+  if(t!=='light'&&t!=='dark')
+    t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+  document.documentElement.setAttribute('data-theme',t);
+})();
+</script>
 <style>
 /* ─────────────────────────────────────────────────────────────
    0 · Tokens  (identical ink to Sheet A-001)
    ───────────────────────────────────────────────────────────── */
 :root{
+  color-scheme:dark;
   --paper-0:#081b30;
   --paper-1:#0f2c4c;
   --line-1:rgba(146,206,255,.10);
@@ -40,9 +53,36 @@
   --redline:#ff6a5c;
   --card:rgba(7,22,40,.78);
   --card-edge:rgba(146,206,255,.35);
+  --rule:rgba(146,206,255,.2);      /* dashed/solid hairlines */
+  --tint:rgba(146,206,255,.035);    /* faint panel wash       */
+  --tint-edge:rgba(146,206,255,.22);
+  --hover:rgba(255,178,119,.07);
+  --sel-ink:#0a2036;
 
   --mono:ui-monospace,"SF Mono","Cascadia Mono","Segoe UI Mono",
          Menlo,Consolas,"Liberation Mono",monospace;
+}
+
+/* the light sheet — same drawing, printed on white */
+:root[data-theme="light"]{
+  color-scheme:light;
+  --paper-0:#e8ecf0;
+  --paper-1:#ffffff;
+  --line-1:transparent;
+  --line-2:rgba(30,66,102,.06);
+  --ink:#12293e;
+  --ink-dim:#5f7791;
+  --accent:#0f6ea3;
+  --safety:#b45f16;
+  --go:#237a4d;
+  --redline:#c0392b;
+  --card:rgba(255,255,255,.88);
+  --card-edge:rgba(24,64,100,.18);
+  --rule:rgba(30,66,102,.16);
+  --tint:rgba(30,66,102,.03);
+  --tint-edge:rgba(30,66,102,.18);
+  --hover:rgba(180,95,22,.07);
+  --sel-ink:#ffffff;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -68,7 +108,7 @@ body::before{
     repeating-linear-gradient(0deg,  var(--line-2) 0 1px, transparent 1px 140px),
     repeating-linear-gradient(90deg, var(--line-2) 0 1px, transparent 1px 140px);
 }
-::selection{background:var(--safety);color:#0a2036}
+::selection{background:var(--safety);color:var(--sel-ink)}
 a{color:var(--accent)}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;
   text-align:left}
@@ -82,6 +122,29 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;
 .mark::after{left:0;top:8px;width:18px;height:1px}
 .mark.tl{top:14px;left:14px}.mark.tr{top:14px;right:14px}
 .mark.bl{bottom:14px;left:14px}.mark.br{bottom:14px;right:14px}
+
+/* ── theme toggle — a real switch, top right (as on Sheet A-001) ── */
+#themeToggle{
+  position:fixed;top:13px;right:44px;z-index:4;
+  display:flex;align-items:center;
+  width:48px;height:24px;padding:2px;
+  border:1px solid var(--card-edge);border-radius:999px;
+  background:var(--card);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  transition:border-color .2s ease,background-color .3s ease;
+}
+#themeToggle:hover{border-color:var(--accent)}
+#themeToggle .knob{
+  display:grid;place-items:center;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--accent);color:var(--paper-0);
+  font-size:10px;line-height:1;
+  transition:transform .3s cubic-bezier(.4,0,.2,1),
+             background-color .3s ease,color .3s ease;
+}
+#themeToggle .knob::after{content:"☾"}
+:root[data-theme="light"] #themeToggle .knob{transform:translateX(24px)}
+:root[data-theme="light"] #themeToggle .knob::after{content:"☀"}
 
 .wrap{
   position:relative;z-index:1;
@@ -97,7 +160,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;
 #back{
   display:inline-block;margin-bottom:26px;
   font-size:10px;letter-spacing:.12em;text-decoration:none;
-  color:var(--ink-dim);border-bottom:1px dashed rgba(146,206,255,.35);
+  color:var(--ink-dim);border-bottom:1px dashed var(--card-edge);
   padding-bottom:2px;transition:color .2s ease,border-color .2s ease;
 }
 #back:hover{color:var(--accent);border-color:var(--accent)}
@@ -176,11 +239,11 @@ h1 i{font-style:normal;color:var(--safety);animation:blink 1.1s steps(1) infinit
 
 .s-blurb{font-size:12px;line-height:1.7;color:var(--ink-dim);
   max-width:620px;padding-top:14px;
-  border-top:1px dashed rgba(146,206,255,.2)}
+  border-top:1px dashed var(--rule)}
 .s-none{font-size:11px;line-height:1.7;color:var(--ink-dim);
   margin-top:14px;padding:12px 14px;
-  border:1px dashed rgba(146,206,255,.28);
-  background:rgba(146,206,255,.03)}
+  border:1px dashed var(--tint-edge);
+  background:var(--tint)}
 .s-none b{color:var(--safety);font-weight:400}
 
 /* ── drawings: the actual projects ────────────────────────── */
@@ -190,12 +253,12 @@ h1 i{font-style:normal;color:var(--safety);animation:blink 1.1s steps(1) infinit
   grid-template-columns:74px 1fr auto;
   gap:14px;align-items:start;
   padding:16px 14px;text-decoration:none;color:var(--ink);
-  border:1px solid rgba(146,206,255,.22);
-  background:rgba(146,206,255,.035);
+  border:1px solid var(--tint-edge);
+  background:var(--tint);
   transition:border-color .2s ease,background-color .2s ease,
              transform .2s ease;
 }
-.drawing:hover{border-color:var(--safety);background:rgba(255,178,119,.07);
+.drawing:hover{border-color:var(--safety);background:var(--hover);
   transform:translateX(3px)}
 .d-code{font-size:10px;letter-spacing:.08em;color:var(--ink-dim);
   font-variant-numeric:tabular-nums;padding-top:3px}
@@ -227,7 +290,7 @@ h1 i{font-style:normal;color:var(--safety);animation:blink 1.1s steps(1) infinit
 }
 #titleblock .row{
   display:flex;justify-content:space-between;gap:10px;
-  padding:7px 11px;border-bottom:1px solid rgba(146,206,255,.18);
+  padding:7px 11px;border-bottom:1px solid var(--rule);
 }
 #titleblock .row:last-child{border-bottom:0}
 #titleblock .row span:first-child{color:var(--ink-dim)}
@@ -271,6 +334,11 @@ h1 i{font-style:normal;color:var(--safety);animation:blink 1.1s steps(1) infinit
 
 <div class="mark tl"></div><div class="mark tr"></div>
 <div class="mark bl"></div><div class="mark br"></div>
+
+<button id="themeToggle" type="button" role="switch"
+        aria-checked="false" aria-label="Light sheet">
+  <span class="knob" aria-hidden="true"></span>
+</button>
 
 <div class="wrap">
 
@@ -373,6 +441,31 @@ const MODULES = [
 ];
 
 const STATUS = { live:'Live', wip:'In Progress', planned:'Planned' };
+
+/* ── theme ────────────────────────────────────────────────────
+   Already stamped on <html> by the head script; this keeps the
+   switch honest and writes the choice where the sibling sites
+   can read it. Cookie for cross-subdomain, localStorage as the
+   fallback when there's no registrable domain (file://, localhost). */
+const themeBtn=document.getElementById('themeToggle'),
+      root=document.documentElement;
+function paintTheme(t,write){
+  root.setAttribute('data-theme',t);
+  themeBtn.setAttribute('aria-checked',String(t==='light'));
+  themeBtn.setAttribute('aria-label',
+    t==='light'?'Switch to the blueprint sheet':'Switch to the light sheet');
+  if(!write)return;
+  try{
+    document.cookie='sheet-theme='+t+';domain=.rishabhdoshi.com;path=/;'
+                   +'max-age=31536000;samesite=lax';
+    document.cookie='sheet-theme='+t+';path=/;max-age=31536000;samesite=lax';
+    localStorage.setItem('sheet-theme',t);
+  }catch(e){}
+}
+paintTheme(root.getAttribute('data-theme')==='light'?'light':'dark',false);
+themeBtn.addEventListener('click',()=>{
+  paintTheme(root.getAttribute('data-theme')==='light'?'dark':'light',true);
+});
 
 /* ── draft the index ──────────────────────────────────────────── */
 const index = document.getElementById('index');
