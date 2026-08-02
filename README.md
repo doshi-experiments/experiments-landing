@@ -7,13 +7,13 @@ Live at **experiments.rishabhdoshi.com**. Companion to
 [portfolio-landing](https://github.com/doshi-experiments/portfolio-landing)
 (Sheet A-001); this is Sheet A-002.
 
-Vanilla HTML, CSS and JS in a single `index.html`. No build step, no
+Vanilla HTML, CSS and JS in a single `public/index.html`. No build step, no
 dependencies, no framework.
 
 ## Adding a project
 
 Everything on the page is rendered from the `MODULES` array near the top of the
-`<script>` block in `index.html`. Adding a project is adding one object — there
+`<script>` block in `public/index.html`. Adding a project is adding one object — there
 is nothing else to touch. Counts, the title block and the "N drawings" labels
 all derive from this array, so they can't fall out of sync.
 
@@ -45,16 +45,20 @@ you don't want to advertise.
 
 ## Deploy
 
-Connected to Cloudflare Pages. **Push to `main` and it deploys** — usually live
-in about a minute.
+Connected to Cloudflare and deployed on push to `main` — usually live in about
+a minute.
 
-Build settings, since there is nothing to build:
+Deployed as a **Worker serving static assets**. `wrangler.jsonc` declares
+`public/` as the asset directory, so Cloudflare needs no dashboard build
+configuration — leave the build command empty.
+
+If deployed via **Pages** instead, the equivalent settings are:
 
 | Setting | Value |
 | --- | --- |
 | Framework preset | None |
 | Build command | *(empty)* |
-| Build output directory | `/` |
+| Build output directory | `public` |
 
 ## Notes
 
