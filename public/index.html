@@ -21,7 +21,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Experiments — Rishabh Doshi</title>
-<meta name="description" content="The experiments wing: calculators, tools and visualizations built by Rishabh Doshi. An index sheet of things made for the sake of making them.">
+<meta name="description" content="The experiments wing: calculators, tools, visualizations and games built by Rishabh Doshi. An index sheet of things made for the sake of making them.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230f2c4c'/%3E%3Cpath d='M0 10.5h32M0 21.5h32M10.5 0v32M21.5 0v32' stroke='%237fd4ff' stroke-opacity='.35' stroke-width='1'/%3E%3Cpath d='M6 24 16 8l10 16' fill='none' stroke='%23ffb277' stroke-width='2.5' stroke-linejoin='round'/%3E%3C/svg%3E">
 <!-- Theme is stamped on <html> before the first paint, from a cookie
      scoped to .rishabhdoshi.com so the choice made on any one of the
@@ -382,6 +382,8 @@ h1 i{font-style:normal;color:var(--safety);animation:blink 1.1s steps(1) infinit
          to draw itself, but the drawings do not need it to be reached:</p>
       <p><a href="https://rent-vs-buy.rishabhdoshi.com"
             style="color:#7fd4ff">E-01.1 — Rent vs Buy Calculator</a></p>
+      <p><a href="https://mr-shake.rishabhdoshi.com"
+            style="color:#7fd4ff">E-04.1 — Mr. Shake</a></p>
       <p><a href="https://rishabhdoshi.com" style="color:#7fd4ff">rishabhdoshi.com</a>
          · <a href="mailto:hello@rishabhdoshi.com" style="color:#7fd4ff">hello@rishabhdoshi.com</a></p>
     </div>
@@ -441,6 +443,29 @@ const MODULES = [
     blurb: 'Data given a shape, so the argument is visible before it has to be '
          + 'explained.',
     drawings: []
+  },
+  {
+    code : 'E-04',
+    name : 'Games',
+    blurb: 'Things built to be played rather than used. Small rulesets, a lot '
+         + 'of attention paid to the seams where people actually touch them.',
+    drawings: [
+      {
+        code  : 'E-04.1',
+        name  : 'Mr. Shake',
+        status: 'live',
+        url   : 'https://mr-shake.rishabhdoshi.com',
+        blurb : 'A social deduction party game for one phone and three to '
+              + 'twenty people. Everyone gets the same word except the ones '
+              + 'who don\'t; describe it without saying it, and vote out the '
+              + 'ones who are guessing. The interesting problem is not the '
+              + 'rules, it is shared-screen secrecy: one device passed around '
+              + 'a table, and no way for the next player to see the last '
+              + 'one\'s word, including through a fast double-tap or a '
+              + 'mid-game reload. 176 hand-picked word pairs, works offline '
+              + 'once installed.'
+      }
+    ]
   }
 ];
 
