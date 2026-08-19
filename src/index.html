@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Experiments — Rishabh Doshi</title>
+<meta name="description" content="Things Rishabh Doshi built to answer a question, or to find out whether they could be built. Calculators, tools, visualizations and games — all live, all open.">
+<meta name="color-scheme" content="light dark">
+
+<!-- Theme, resolved before first paint so there is no flash.
+     The cookie is scoped to .rishabhdoshi.com so the choice carries across
+     the portfolio, this index and the apps. localStorage cannot do that —
+     it is per-origin — so the cookie is the cross-subdomain carrier and
+     localStorage is the fallback when cookies are blocked. -->
+<script>
+(function(){
+  var m=document.cookie.match(/(?:^|;\s*)sheet-theme=(light|dark)/),t=m&&m[1];
+  if(!t){ try{ t=localStorage.getItem('sheet-theme'); }catch(e){} }
+  if(!t){ t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'; }
+  document.documentElement.setAttribute('data-theme',t);
+  document.documentElement.style.colorScheme=t;
+  /* The one unavoidable literal in the codebase: this runs before any
+     stylesheet exists, so --paper cannot be read yet, and without it the page
+     flashes the wrong ground before first paint. Must stay in step with
+     --paper in tokens.css. Everything after first paint reads the token.
+     feltwork-allow-hex */
+  var bg = t==='dark' ? '#1B2733' : '#FFFFFF';
+  document.documentElement.style.background=bg;
+  var meta=document.createElement('meta');
+  meta.name='theme-color'; meta.content=bg;
+  document.head.appendChild(meta);
+})();
+</script>
+
+<!--feltwork-->
+
+<style>
+/* Site-specific pieces Feltwork does not ship: the theme switch, the
+   accordion, the status chips. Everything else comes from the package, and
+   every value below resolves to a package token — no raw hex here. */
+
+/* ── theme switch ─────────────────────────────────────────────────────── */
+.theme-toggle {
+  position: fixed; top: var(--s-3); right: var(--s-3); z-index: 5;
+  width: 56px; height: 32px; padding: 3px;
+  border-radius: var(--r-pill);
+  background: var(--chip);
+  box-shadow: inset 0 0 0 2px var(--rule);
+  display: flex; align-items: center;
+}
+.theme-toggle__dot {
+  width: 24px; height: 24px; border-radius: var(--r-pill);
+  background: var(--pencil);
+  transform: translateX(0);
+  transition: transform var(--release);
+}
+:root[data-theme="dark"] .theme-toggle__dot { transform: translateX(24px); }
+
+/* ── header ───────────────────────────────────────────────────────────── */
+.back { display: inline-block; margin-bottom: var(--s-4); color: var(--text-mute); }
+.back:hover { color: var(--text); }
+.hero__head .lede { margin-top: var(--s-4); color: var(--text-mute); }
+
+/* ── the accordion ────────────────────────────────────────────────────────
+   grid-template-rows 0fr → 1fr is the expand mechanism: animatable, and no
+   magic height numbers to keep in sync with the content. */
+.shelf__section { padding-block: var(--s-5); }
+
+.sheet-head {
+  display: grid;
+  grid-template-columns: 1fr auto var(--s-4);
+  align-items: center;
+  gap: var(--s-3);
+  width: 100%;
+  text-align: left;
+  padding: var(--s-3) 0;
+  margin-left: calc(var(--s-5) * -1);
+  padding-left: var(--s-4);
+  position: relative;
+}
+.sheet-head::before {
+  content: ""; position: absolute; left: 0; top: 50%;
+  width: var(--s-3); height: 2px; background: currentColor; opacity: .5;
+}
+.sheet-head .shelf__label { margin: 0; padding: 0; }
+.sheet-head .shelf__label::before { content: none; }
+.sheet-head__meta { color: var(--text-mute); }
+
+/* a plus that becomes a minus — drawn, not a glyph, and never an emoji */
+.sheet-head__chev { position: relative; width: var(--s-3); height: var(--s-3); }
+.sheet-head__chev::before,
+.sheet-head__chev::after {
+  content: ""; position: absolute; inset: 50% 0 auto 0;
+  height: 2px; background: currentColor; border-radius: var(--r-pill);
+}
+.sheet-head__chev::after {
+  transform: rotate(90deg);
+  transition: transform var(--release), opacity var(--release);
+}
+.open .sheet-head__chev::after { transform: rotate(0deg); opacity: 0; }
+
+.sheet-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--calm); }
+.open .sheet-body { grid-template-rows: 1fr; }
+.sheet-inner { overflow: hidden; min-height: 0; }
+.sheet-pad { padding-top: var(--s-4); }
+
+.sheet-blurb { color: var(--text-mute); margin-bottom: var(--s-4); }
+.sheet-none {
+  color: var(--text-mute);
+  padding: var(--s-4);
+  border-radius: var(--r-lg);
+  box-shadow: inset 0 0 0 2px var(--rule);
+}
+
+/* ── cards ────────────────────────────────────────────────────────────── */
+.card__meta {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-2); margin-bottom: var(--s-2);
+}
+
+/* Status is carried by the DOT'S FILL plus the word — never by hue alone.
+   Hue already means the discipline on this page, and reusing it for status
+   would make the code unlearnable. */
+.status { display: inline-flex; align-items: center; gap: var(--s-1); }
+.status::before {
+  content: ""; width: 8px; height: 8px; border-radius: var(--r-pill);
+  background: var(--seam); box-shadow: inset 0 0 0 2px var(--seam);
+}
+.status--planned::before, .status--wip::before { background: transparent; }
+
+/* ── foot ─────────────────────────────────────────────────────────────── */
+.foot { padding-block: var(--s-6); color: var(--text-mute); }
+.foot a { text-decoration: underline; text-decoration-color: var(--pencil);
+          text-decoration-thickness: 2px; text-underline-offset: 4px; }
+
+/* ── no-JS ────────────────────────────────────────────────────────────── */
+.noscript { padding: var(--s-5); max-width: 62ch; margin: 0 auto; }
+.noscript a { text-decoration: underline; text-decoration-color: var(--pencil); }
+</style>
+</head>
+<body>
+
+<button id="themeToggle" class="theme-toggle pressable" type="button" role="switch"
+        aria-checked="false" aria-label="Switch to the dark sheet">
+  <span class="theme-toggle__dot" aria-hidden="true"></span>
+</button>
+
+<div class="shelf">
+
+  <header class="hero">
+    <div class="hero__head">
+      <a class="back label" href="https://rishabhdoshi.com">← rishabhdoshi.com</a>
+      <h1 class="felt-head">Experiments</h1>
+      <p class="lede">Things I built to answer a question I got tired of
+        guessing at, or to find out whether they could be built. Every one of
+        them is live and open.</p>
+    </div>
+    <div class="hero__object" data-icon-slot="rocket" aria-hidden="true"></div>
+  </header>
+
+  <main id="index"><!-- the index renders here from MODULES --></main>
+
+  <footer class="foot">
+    <p class="label">
+      <span id="tbCount">—</span> live ·
+      <a href="mailto:hello@rishabhdoshi.com">hello@rishabhdoshi.com</a>
+    </p>
+  </footer>
+
+</div>
+
+<!-- The icons, inlined once at build time and cloned per card. They must be
+     inline: an SVG behind <img src> is an isolated document, cannot see the
+     ramp tokens, and renders solid black. -->
+<div hidden id="fw-icons">
+  <template data-icon="rocket"><!--iso:rocket--></template>
+  <template data-icon="robot"><!--iso:robot--></template>
+  <template data-icon="cash"><!--iso:cash--></template>
+  <template data-icon="laptop"><!--iso:laptop--></template>
+</div>
+
+<noscript>
+  <div class="noscript">
+    <h2>Experiments</h2>
+    <p>This index draws itself with JavaScript, but the things it lists do not
+      need it:</p>
+    <p><a href="https://rent-vs-buy.rishabhdoshi.com">Rent vs Buy</a></p>
+    <p><a href="https://mr-shake.rishabhdoshi.com">Mr. Shake</a></p>
+    <p><a href="https://rishabhdoshi.com">rishabhdoshi.com</a> ·
+       <a href="mailto:hello@rishabhdoshi.com">hello@rishabhdoshi.com</a></p>
+  </div>
+</noscript>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   THE INDEX — adding a project is adding an object. That is the whole
+   content model. No CMS, no database.
+
+   module:  { code, name, hue, icon, blurb, items[] }
+   item:    { code, name, status, url, blurb }
+   status:  'live' | 'wip' | 'planned'
+
+   HUE BINDING (local). Feltwork §2 gives each hue one permanent meaning —
+   canary shipped, oxford written, eucalyptus work, blush the workshop. Those
+   are portfolio categories, and by them every discipline on THIS page is
+   "the workshop": this whole site is the workshop. So the four ramps are
+   rebound here to the four disciplines, and that binding is local to this
+   page. The portfolio still uses the §2 meanings.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+const MODULES = [
+  {
+    code: '01', name: 'Calculators', hue: 'euca', icon: 'cash',
+    blurb: 'Money questions with too many moving parts to hold in your head '
+         + 'at once. Every assumption is an input you can argue with, and the '
+         + 'chart changes its mind when you do.',
+    items: [
+      {
+        code: '01.1', name: 'Rent vs Buy', status: 'live',
+        url: 'https://rent-vs-buy.rishabhdoshi.com',
+        blurb: 'Thirty years of renting against owning, on either Canadian or '
+             + 'US rules — the compounding, the insurance and the tax all '
+             + 'differ, so the toggle changes the arithmetic and not just the '
+             + 'labels. Five tabs, including two properties compared against '
+             + 'one pot of cash. Change one assumption and watch the crossover '
+             + 'year move. Every input lives in the URL, so the version you '
+             + 'are looking at is the version you can send someone.'
+      }
+    ]
+  },
+  {
+    code: '02', name: 'Tools', hue: 'blush', icon: 'laptop',
+    blurb: 'Small, single-purpose utilities built to scratch one specific itch '
+         + 'and then left running because someone else might have the same itch.',
+    items: []
+  },
+  {
+    code: '03', name: 'Visualizations', hue: 'oxford', icon: 'robot',
+    blurb: 'Data given a shape, so the argument is visible before it has to be '
+         + 'explained.',
+    items: []
+  },
+  {
+    code: '04', name: 'Games', hue: 'canary', icon: 'rocket',
+    blurb: 'Things built to be played rather than used. Small rulesets, a lot '
+         + 'of attention paid to the seams where people actually touch them.',
+    items: [
+      {
+        code: '04.1', name: 'Mr. Shake', status: 'live',
+        url: 'https://mr-shake.rishabhdoshi.com',
+        blurb: 'A social deduction party game for one phone and three to twenty '
+             + 'people. Everyone gets the same word except the ones who do not; '
+             + 'describe it without saying it, and vote out the ones who are '
+             + 'guessing. The interesting problem is not the rules, it is '
+             + 'shared-screen secrecy: one device passed around a table, and no '
+             + 'way for the next player to see the last one’s word. 176 '
+             + 'hand-picked word pairs, works offline once installed.'
+      }
+    ]
+  }
+];
+
+const STATUS = { live: 'Live', wip: 'In progress', planned: 'Planned' };
+
+/* ── theme ─────────────────────────────────────────────────────────────── */
+const themeBtn = document.getElementById('themeToggle');
+const root = document.documentElement;
+
+function paintTheme(t, write) {
+  root.setAttribute('data-theme', t);
+  root.style.colorScheme = t;
+  /* By now the stylesheet has loaded, so the ground comes from the token
+     rather than a second copy of it. Setting data-theme first is what makes
+     the read return the NEW theme's value. */
+  root.style.background = '';
+  const paper = getComputedStyle(root).getPropertyValue('--paper').trim();
+  root.style.background = paper;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.content = paper;
+  themeBtn.setAttribute('aria-checked', String(t === 'dark'));
+  themeBtn.setAttribute('aria-label',
+    t === 'dark' ? 'Switch to the light sheet' : 'Switch to the dark sheet');
+  if (!write) return;
+  try {
+    document.cookie = 'sheet-theme=' + t + ';domain=.rishabhdoshi.com;path=/;'
+                    + 'max-age=31536000;samesite=lax';
+    document.cookie = 'sheet-theme=' + t + ';path=/;max-age=31536000;samesite=lax';
+    localStorage.setItem('sheet-theme', t);
+  } catch (e) {}
+}
+paintTheme(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light', false);
+themeBtn.addEventListener('click', () => {
+  paintTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true);
+});
+
+/* ── icons ─────────────────────────────────────────────────────────────── */
+const icon = (name) => {
+  const t = document.querySelector(`#fw-icons [data-icon="${name}"]`);
+  return t ? t.content.cloneNode(true) : document.createDocumentFragment();
+};
+for (const slot of document.querySelectorAll('[data-icon-slot]')) {
+  slot.appendChild(icon(slot.dataset.iconSlot));
+}
+
+/* ── draw the index ────────────────────────────────────────────────────── */
+const index = document.getElementById('index');
+const sections = [];
+
+for (const m of MODULES) {
+  const n = m.items.length;
+
+  const sec = document.createElement('section');
+  sec.className = 'shelf__section hue-' + m.hue;
+  sec.id = m.code;
+
+  const head = document.createElement('button');
+  head.type = 'button';
+  head.className = 'sheet-head pressable';
+  head.setAttribute('aria-expanded', 'false');
+  head.setAttribute('aria-controls', m.code + '-body');
+  head.innerHTML =
+    `<span class="shelf__label label">${m.code} / ${m.name}</span>` +
+    `<span class="sheet-head__meta label">${n ? n + (n > 1 ? ' live' : ' live')
+                                              : 'Nothing yet'}</span>` +
+    `<span class="sheet-head__chev" aria-hidden="true"></span>`;
+
+  const body = document.createElement('div');
+  body.className = 'sheet-body';
+  body.id = m.code + '-body';
+
+  const inner = document.createElement('div');
+  inner.className = 'sheet-inner';
+
+  const pad = document.createElement('div');
+  pad.className = 'sheet-pad';
+
+  const blurb = document.createElement('p');
+  blurb.className = 'sheet-blurb';
+  blurb.textContent = m.blurb;
+  pad.appendChild(blurb);
+
+  if (n) {
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    for (const d of m.items) {
+      const a = document.createElement('a');
+      a.className = 'card pressable u-6';
+      a.href = d.url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.innerHTML =
+        `<span class="card__plinth" data-icon-slot="${m.icon}" aria-hidden="true"></span>` +
+        `<span class="card__meta label"><span>${d.code}</span>` +
+        `<span class="status status--${d.status}">${STATUS[d.status]}</span></span>` +
+        `<h3 class="card__name">${d.name}</h3>` +
+        `<p class="card__line">${d.blurb}</p>`;
+      a.querySelector('[data-icon-slot]').appendChild(icon(m.icon));
+      grid.appendChild(a);
+    }
+    pad.appendChild(grid);
+  } else {
+    /* An empty state is an invitation, not an apology. */
+    const none = document.createElement('p');
+    none.className = 'sheet-none';
+    none.textContent = 'Nothing here yet. This is where the next one goes.';
+    pad.appendChild(none);
+  }
+
+  inner.appendChild(pad);
+  body.appendChild(inner);
+  sec.appendChild(head);
+  sec.appendChild(body);
+  index.appendChild(sec);
+
+  sections.push({ sec, head, body });
+}
+
+/* Collapsed panels must not be reachable by keyboard. */
+function setOpen(s, open) {
+  s.sec.classList.toggle('open', open);
+  s.head.setAttribute('aria-expanded', String(open));
+  s.body.inert = !open;
+}
+sections.forEach((s) => setOpen(s, false));
+
+sections.forEach((s) => {
+  s.head.addEventListener('click', () => {
+    const open = !s.sec.classList.contains('open');
+    setOpen(s, open);
+    /* keep the location bar shareable: /#01 opens that section */
+    history.replaceState(null, '',
+      open ? '#' + s.sec.id : location.pathname + location.search);
+  });
+});
+
+const target = sections.find((s) => '#' + s.sec.id === decodeURIComponent(location.hash));
+if (target) setOpen(target, true);
+else {
+  const first = sections.find((s, i) => MODULES[i].items.length);
+  if (first) setOpen(first, true);
+}
+
+/* The count runs off the real data, so it can never drift. */
+document.getElementById('tbCount').textContent =
+  MODULES.reduce((t, m) => t + m.items.filter((d) => d.status === 'live').length, 0);
+</script>
+</body>
+</html>
