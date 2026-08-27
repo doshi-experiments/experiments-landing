@@ -80,6 +80,10 @@ If deployed via **Pages** instead, the equivalent settings are:
   sheet already open, and opening a sheet updates the URL so it stays shareable.
 - Collapsed panels get the `inert` attribute, so their links aren't reachable by
   keyboard while hidden.
-- `<noscript>` carries direct links to every live project, so the drawings stay
-  reachable even if the index can't draw itself.
+- `<noscript>` carries direct links to every live project — and to each of its
+  `parts` — so the drawings stay reachable even if the index can't draw itself.
+- The light/dark choice is a `sheet-theme` cookie scoped to
+  `.rishabhdoshi.com`, so it follows you across the subdomains. The same name
+  and scope are read by `portfolio-landing` and `rent-vs-buy-calculator`;
+  renaming it here un-syncs them silently.
 - Respects `prefers-reduced-motion`.
