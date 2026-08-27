@@ -29,6 +29,20 @@ To add a project to an existing module, push a drawing onto its `drawings` array
 }
 ```
 
+A project with its own separately-addressable sections can list them as
+`parts`, which render as a row of small links under the card:
+
+```js
+parts: [
+  { name: 'Prepayment', url: 'https://example.workers.dev/prepayment/' }
+]
+```
+
+Omit it and nothing renders. These are deep links worth having for their own
+sake — they give each section a route someone can land on directly, and a
+search engine a path to it. Note that `.d-parts` is a **sibling** of the
+card, not a child: the card is itself an `<a>`, and anchors cannot nest.
+
 To add a whole new discipline, add a module:
 
 ```js
