@@ -8,9 +8,7 @@
   are things I built and you can open them.
 
   Adding a project is one object in the MODULES array below. That is
-  the whole content model. No CMS, no build step, no dependencies.
-
-  100% vanilla HTML, CSS and JavaScript.
+  the whole content model. No CMS, and no build step.
 
   Sheet A-002 · Companion to A-001 · Rishabh Doshi
   hello@rishabhdoshi.com
@@ -407,6 +405,14 @@ h1 i{font-style:normal;color:var(--safety);animation:blink 1.1s steps(1) infinit
             style="color:#7fd4ff">Two properties</a> ·
          <a href="https://rent-vs-buy.rishabhdoshi.com/investment-property/"
             style="color:#7fd4ff">Investment property</a></p>
+      <p><a href="https://visualizations.rishabhdoshi.com"
+            style="color:#7fd4ff">E-03.1 — Visualizations</a><br>
+         <a href="https://visualizations.rishabhdoshi.com/#growth"
+            style="color:#7fd4ff">Growth Cage</a> ·
+         <a href="https://visualizations.rishabhdoshi.com/#silk"
+            style="color:#7fd4ff">Silk</a> ·
+         <a href="https://visualizations.rishabhdoshi.com/#chaos"
+            style="color:#7fd4ff">Divergence</a></p>
       <p><a href="https://mr-shake.rishabhdoshi.com"
             style="color:#7fd4ff">E-04.1 — Mr. Shake</a></p>
       <p><a href="https://rishabhdoshi.com" style="color:#7fd4ff">rishabhdoshi.com</a>
@@ -476,7 +482,35 @@ const MODULES = [
     name : 'Visualizations',
     blurb: 'Data given a shape, so the argument is visible before it has to be '
          + 'explained.',
-    drawings: []
+    drawings: [
+      {
+        code  : 'E-03.1',
+        name  : 'Visualizations',
+        status: 'live',
+        url   : 'https://visualizations.rishabhdoshi.com',
+        blurb : 'Three exhibits on one sheet, each about a quantity that gets '
+              + 'away from you. In the first, two balls bounce in a cage and '
+              + 'every collision spawns a third. Collision rate goes as the '
+              + 'square of the population, so the obvious prediction is that '
+              + 'the count runs to infinity at a finite, calculable time — and '
+              + 'it does not. The page measures the growth exponent rather '
+              + 'than assuming it, and finds it below one: the balls share a '
+              + 'fixed pot of energy so they slow as they multiply, and a '
+              + 'newborn needs somewhere to go, which gets harder until it is '
+              + 'impossible. Watching that intuition break is the exhibit. The '
+              + 'second is a drawing surface with up to 24-fold symmetry, '
+              + 'where each stroke is several fine strands that fan apart as '
+              + 'you accelerate. The third starts a hundred and twenty double '
+              + 'pendulums a billionth of a radian apart and fits the Lyapunov '
+              + 'exponent live, which is the rate at which knowing the '
+              + 'starting conditions stops being any help.',
+        parts : [
+          { name: 'Growth Cage', url: 'https://visualizations.rishabhdoshi.com/#growth' },
+          { name: 'Silk',        url: 'https://visualizations.rishabhdoshi.com/#silk'   },
+          { name: 'Divergence',  url: 'https://visualizations.rishabhdoshi.com/#chaos'  }
+        ]
+      }
+    ]
   },
   {
     code : 'E-04',
