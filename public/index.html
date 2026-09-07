@@ -412,7 +412,9 @@ h1 i{font-style:normal;color:var(--safety);animation:blink 1.1s steps(1) infinit
          <a href="https://visualizations.rishabhdoshi.com/#silk"
             style="color:#7fd4ff">Silk</a> ·
          <a href="https://visualizations.rishabhdoshi.com/#chaos"
-            style="color:#7fd4ff">Divergence</a></p>
+            style="color:#7fd4ff">Divergence</a> ·
+         <a href="https://visualizations.rishabhdoshi.com/#harmonograph"
+            style="color:#7fd4ff">Harmonograph</a></p>
       <p><a href="https://mr-shake.rishabhdoshi.com"
             style="color:#7fd4ff">E-04.1 — Mr. Shake</a></p>
       <p><a href="https://rishabhdoshi.com" style="color:#7fd4ff">rishabhdoshi.com</a>
@@ -488,7 +490,7 @@ const MODULES = [
         name  : 'Visualizations',
         status: 'live',
         url   : 'https://visualizations.rishabhdoshi.com',
-        blurb : 'Three exhibits on one sheet, each about a quantity that gets '
+        blurb : 'Four exhibits on one sheet, each about a quantity that gets '
               + 'away from you. In the first, two balls bounce in a cage and '
               + 'every collision spawns a third. Collision rate goes as the '
               + 'square of the population, so the obvious prediction is that '
@@ -503,11 +505,17 @@ const MODULES = [
               + 'you accelerate. The third starts a hundred and twenty double '
               + 'pendulums a billionth of a radian apart and fits the Lyapunov '
               + 'exponent live, which is the rate at which knowing the '
-              + 'starting conditions stops being any help.',
+              + 'starting conditions stops being any help. The fourth hands '
+              + 'you those pendulums as a brush: you drag the pivot and their '
+              + 'lower bobs are the ink. A pivot being dragged is not an '
+              + 'inertial frame, so it is your acceleration that swings them '
+              + 'and not your speed — glide steadily and they barely stir, '
+              + 'flick and they lash.',
         parts : [
-          { name: 'Growth Cage', url: 'https://visualizations.rishabhdoshi.com/#growth' },
-          { name: 'Silk',        url: 'https://visualizations.rishabhdoshi.com/#silk'   },
-          { name: 'Divergence',  url: 'https://visualizations.rishabhdoshi.com/#chaos'  }
+          { name: 'Growth Cage',  url: 'https://visualizations.rishabhdoshi.com/#growth' },
+          { name: 'Silk',         url: 'https://visualizations.rishabhdoshi.com/#silk'   },
+          { name: 'Divergence',   url: 'https://visualizations.rishabhdoshi.com/#chaos'  },
+          { name: 'Harmonograph', url: 'https://visualizations.rishabhdoshi.com/#harmonograph' }
         ]
       }
     ]
