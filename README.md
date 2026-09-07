@@ -7,8 +7,8 @@ Live at **experiments.rishabhdoshi.com**. Companion to
 [portfolio-landing](https://github.com/doshi-experiments/portfolio-landing)
 (Sheet A-001); this is Sheet A-002.
 
-Vanilla HTML, CSS and JS in a single `public/index.html`. No build step, no
-dependencies, no framework.
+HTML, CSS and JS in a single `public/index.html`, uploaded as-is with no
+build step.
 
 ## Adding a project
 
