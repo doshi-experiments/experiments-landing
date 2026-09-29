@@ -14,7 +14,7 @@
   hello@rishabhdoshi.com
   ═══════════════════════════════════════════════════════════════════
 -->
-<html lang="en">
+<html lang="en" data-project="experiments" data-density="comfortable">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -342,8 +342,12 @@ h1 i{font-style:normal;color:var(--safety);animation:blink 1.1s steps(1) infinit
   }
 }
 </style>
+<link rel="stylesheet" href="/design-system/tokens.css">
+<link rel="stylesheet" href="/design-system/legacy.css">
+<script defer src="/design-system/metadata.js"></script>
 </head>
 <body>
+<a class="ds-skip" href="#index">Skip to content</a>
 
 <div class="mark tl"></div><div class="mark tr"></div>
 <div class="mark bl"></div><div class="mark br"></div>
@@ -371,7 +375,7 @@ h1 i{font-style:normal;color:var(--safety);animation:blink 1.1s steps(1) infinit
     <span>Sheet</span><span>Discipline</span><span>Contents</span><span></span>
   </div>
 
-  <main id="index"><!-- the index is drafted here by JS --></main>
+  <main id="index" tabindex="-1"><!-- the index is drafted here by JS --></main>
 
   <div id="titleblock">
     <div class="row"><span>Project</span><span>experiments.rishabhdoshi.com</span></div>
