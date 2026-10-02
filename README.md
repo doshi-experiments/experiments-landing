@@ -87,3 +87,14 @@ If deployed via **Pages** instead, the equivalent settings are:
   and scope are read by `portfolio-landing` and `rent-vs-buy-calculator`;
   renaming it here un-syncs them silently.
 - Respects `prefers-reduced-motion`.
+
+
+## Shared design system (0.1.0)
+
+This checkout consumes generated assets from `@doshi-experiments/design-system`.
+The `design-system/release.json` file (under `public/` or `src/` where applicable)
+records their version and hashes. Edit the shared token source, rebuild it, and
+run its `scripts/sync.mjs` against this asset directory to upgrade. Do not edit
+these generated files locally. Keep the `sheet-theme` cookie and pre-paint
+stamp intact. Light/dark appearance and project identity are separate dimensions.
+Hanken Grotesk is served locally with its OFL notice.
