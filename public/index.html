@@ -344,6 +344,8 @@ h1 i{font-style:normal;color:var(--safety);animation:blink 1.1s steps(1) infinit
 </style>
 <link rel="stylesheet" href="/design-system/tokens.css">
 <link rel="stylesheet" href="/design-system/legacy.css">
+<link rel="stylesheet" href="/design-system/components.css">
+<link rel="stylesheet" href="/index-components.css">
 <script defer src="/design-system/metadata.js"></script>
 </head>
 <body>
@@ -584,12 +586,12 @@ for (const m of MODULES) {
   const n = m.drawings.length;
 
   const sec = document.createElement('section');
-  sec.className = 'sheet' + (n ? '' : ' empty');
+  sec.className = 'sheet ds-disclosure' + (n ? '' : ' empty');
   sec.id = m.code;
 
   const head = document.createElement('button');
   head.type = 'button';
-  head.className = 'sheet-head';
+  head.className = 'sheet-head ds-disclosure-trigger';
   head.setAttribute('aria-expanded', 'false');
   head.setAttribute('aria-controls', m.code + '-body');
   head.innerHTML =
@@ -612,12 +614,12 @@ for (const m of MODULES) {
     `<p class="s-blurb">${m.blurb}</p>` +
     (n
       ? `<ul class="drawings">${m.drawings.map(d => `
-          <li><a class="drawing" href="${d.url}" target="_blank" rel="noopener">
+          <li><a class="drawing ds-project-link" href="${d.url}" target="_blank" rel="noopener">
             <span class="d-code">${d.code}</span>
             <span class="d-main">
               <span class="d-title">
                 <span class="d-name">${d.name}</span>
-                <span class="d-status ${d.status}">${STATUS[d.status]}</span>
+                <span class="ds-badge" data-status="${d.status}">${STATUS[d.status]}</span>
               </span>
               <span class="d-blurb">${d.blurb}</span>
             </span>
@@ -625,7 +627,7 @@ for (const m of MODULES) {
           </a>${d.parts && d.parts.length
             ? `<nav class="d-parts" aria-label="${d.name} sections">${
                 d.parts.map(pt =>
-                  `<a class="d-part" href="${pt.url}" target="_blank" rel="noopener">${pt.name}</a>`
+                  `<a class="d-part ds-chip-link" href="${pt.url}" target="_blank" rel="noopener">${pt.name}</a>`
                 ).join('')}</nav>`
             : ''}</li>`).join('')}</ul>`
       : `<p class="s-none">No drawings issued for this sheet yet —
