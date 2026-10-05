@@ -1,100 +1,17 @@
-# experiments-landing
+# Experiments
 
-The experiments wing of [rishabhdoshi.com](https://rishabhdoshi.com) — an index
-sheet listing the things I've built, grouped by discipline.
+A direct directory of Rishabh Doshi’s calculators, interactive visualizations, and Mr. Shake. All three projects are accessible immediately; native disclosures reveal calculator and visualization subpages.
 
-Live at **experiments.rishabhdoshi.com**. Companion to
-[portfolio-landing](https://github.com/doshi-experiments/portfolio-landing)
-(Sheet A-001); this is Sheet A-002.
+`public/index.html` contains the real project content, so the directory works without JavaScript. Add a project section with a name, one short description, and a literal action. Add subpages inside a native `details` disclosure when needed. Empty categories are not advertised.
 
-HTML, CSS and JS in a single `public/index.html`, uploaded as-is with no
-build step.
+## Shared identity
 
-## Adding a project
+Navigation, the labeled System/Light/Dark appearance control, Commissioner, colors, and controls come from `@doshi-experiments/design-system`. Change the source package and run its central rollout command to refresh `public/design-system/`. The generated `release.json` records version and file hashes.
 
-Everything on the page is rendered from the `MODULES` array near the top of the
-`<script>` block in `public/index.html`. Adding a project is adding one object — there
-is nothing else to touch. Counts, the title block and the "N drawings" labels
-all derive from this array, so they can't fall out of sync.
+The `sheet-theme` preference uses a `.rishabhdoshi.com` cookie across public sites and localStorage as a fallback. The shared prepaint script applies it before styles paint. Existing `#E-01`, `#E-03`, and `#E-04` links continue to locate their projects.
 
-To add a project to an existing module, push a drawing onto its `drawings` array:
+## Preview and deploy
 
-```js
-{
-  code  : 'E-01.2',                    // sheet number, your own convention
-  name  : 'Mortgage Stress Test',
-  status: 'live',                      // 'live' | 'wip' | 'planned'
-  url   : 'https://example.workers.dev',
-  blurb : 'What it does and why it exists.'
-}
-```
+Serve `public/` with a local HTTP server, for example `python3 -m http.server 8080 --directory public`.
 
-A project with its own separately-addressable sections can list them as
-`parts`, which render as a row of small links under the card:
-
-```js
-parts: [
-  { name: 'Prepayment', url: 'https://example.workers.dev/prepayment/' }
-]
-```
-
-Omit it and nothing renders. These are deep links worth having for their own
-sake — they give each section a route someone can land on directly, and a
-search engine a path to it. Note that `.d-parts` is a **sibling** of the
-card, not a child: the card is itself an `<a>`, and anchors cannot nest.
-
-To add a whole new discipline, add a module:
-
-```js
-{
-  code : 'E-04',
-  name : 'Writing',
-  blurb: 'One line on what belongs on this sheet.',
-  drawings: []                         // empty renders as "Not yet issued"
-}
-```
-
-A module with an empty `drawings` array shows as a reserved sheet. Delete any
-you don't want to advertise.
-
-## Deploy
-
-Connected to Cloudflare and deployed on push to `main` — usually live in about
-a minute.
-
-Deployed as a **Worker serving static assets**. `wrangler.jsonc` declares
-`public/` as the asset directory, so Cloudflare needs no dashboard build
-configuration — leave the build command empty.
-
-If deployed via **Pages** instead, the equivalent settings are:
-
-| Setting | Value |
-| --- | --- |
-| Framework preset | None |
-| Build command | *(empty)* |
-| Build output directory | `public` |
-
-## Notes
-
-- Each module deep-links: `experiments.rishabhdoshi.com/#E-01` lands with that
-  sheet already open, and opening a sheet updates the URL so it stays shareable.
-- Collapsed panels get the `inert` attribute, so their links aren't reachable by
-  keyboard while hidden.
-- `<noscript>` carries direct links to every live project — and to each of its
-  `parts` — so the drawings stay reachable even if the index can't draw itself.
-- The light/dark choice is a `sheet-theme` cookie scoped to
-  `.rishabhdoshi.com`, so it follows you across the subdomains. The same name
-  and scope are read by `portfolio-landing` and `rent-vs-buy-calculator`;
-  renaming it here un-syncs them silently.
-- Respects `prefers-reduced-motion`.
-
-
-## Shared design system (0.1.0)
-
-This checkout consumes generated assets from `@doshi-experiments/design-system`.
-The `design-system/release.json` file (under `public/` or `src/` where applicable)
-records their version and hashes. Edit the shared token source, rebuild it, and
-run its `scripts/sync.mjs` against this asset directory to upgrade. Do not edit
-these generated files locally. Keep the `sheet-theme` cookie and pre-paint
-stamp intact. Light/dark appearance and project identity are separate dimensions.
-Hanken Grotesk is served locally with its OFL notice.
+Cloudflare deploys pushes to `main`. `wrangler.jsonc` declares `public/` as the asset directory. The site has no build step.
