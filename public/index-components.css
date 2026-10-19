@@ -1,13 +1,13 @@
 /* Directory composition; navigation, controls, type and colors are shared. */
 * {box-sizing:border-box}
 body {margin:0;background:var(--ds-surface-page);color:var(--ds-text);font-family:var(--ds-font-body);line-height:1.55}
-a {color:var(--ds-action-primary)}
+a {color:var(--ds-action-link)}
 .wrap {max-width:var(--ds-page-width);margin:auto;padding:56px clamp(20px,4vw,48px) 48px}
 .introduction {max-width:64ch;margin-bottom:40px}
 .introduction h1 {font-size:clamp(39px,5vw,61px);font-weight:700;letter-spacing:-.035em;line-height:1.05;margin:0 0 16px;font-variation-settings:var(--ds-font-display-variation)}
 .introduction p {font-size:18px;color:var(--ds-text-secondary);margin:0}
 .projects {display:grid;gap:0}
-.project {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 32px;padding:28px 0;border-bottom:1px solid var(--ds-border);scroll-margin-top:24px}
+.project {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 32px;padding:28px 0;border-bottom:1.5px dashed var(--ds-border);scroll-margin-top:24px}
 .project:last-child {border-bottom:0}
 .project-main {min-width:0}
 .project h2 {font-size:25px;line-height:1.25;font-weight:700;letter-spacing:-.02em;margin:0 0 10px}
@@ -16,7 +16,7 @@ a {color:var(--ds-action-primary)}
 .project p {font-size:16px;color:var(--ds-text-secondary);max-width:64ch;margin:0}
 .project-action.ds-button {display:inline-flex;align-items:center;align-self:center;white-space:nowrap;text-decoration:none;font-size:16px;min-height:44px;padding:10px 16px}
 .project-parts {grid-column:1/-1;font-size:16px;margin-top:4px}
-.project-parts summary {color:var(--ds-action-primary);cursor:pointer;width:fit-content;min-height:44px;padding:10px 0;list-style-position:inside}
+.project-parts summary {color:var(--ds-action-link);cursor:pointer;width:fit-content;min-height:44px;padding:10px 0;list-style-position:inside}
 .project-parts summary:focus-visible {outline:2px solid var(--ds-focus);outline-offset:4px;border-radius:4px}
 .project-parts nav {display:flex;flex-wrap:wrap;gap:8px;padding-top:12px}
 .project-parts a {text-decoration:none}
