@@ -69,7 +69,7 @@
 </footer>
 <script type="module">
 import { mountSiteHeader } from '/design-system/site.js';
-mountSiteHeader(document.getElementById('site-header'), {project:'experiments'});
+mountSiteHeader(document.getElementById('site-header'), {project:'experiments', showProjectTitle:false});
 // Preserve previously shared category URLs while making projects directly accessible.
 const anchors={'#E-01':'calculators','#E-03':'visualizations','#E-04':'mr-shake'};
 const destination=document.getElementById(anchors[location.hash]);
