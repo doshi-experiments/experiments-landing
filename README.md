@@ -6,7 +6,7 @@ A direct directory of Rishabh Doshi’s calculators, interactive visualizations,
 
 ## Shared identity
 
-Navigation, the labeled System/Light/Dark appearance control, Commissioner, colors, and controls come from `@doshi-experiments/design-system`. Change the source package and run its central rollout command to refresh `public/design-system/`. The generated `release.json` records version and file hashes.
+Navigation, the labeled System/Light/Dark appearance control, Host Grotesk, the Felt palette and texture, and controls come from `@doshi-experiments/design-system` (release 0.7.0). Links and the subpage disclosures use the design system's link red (`--ds-action-link`), never the signal fill, which is too light to read as text. Project dividers are stitched. Change the source package and run its central rollout command to refresh `public/design-system/`. The generated `release.json` records version and file hashes.
 
 The `sheet-theme` preference uses a `.rishabhdoshi.com` cookie across public sites and localStorage as a fallback. The shared prepaint script applies it before styles paint. Existing `#E-01`, `#E-03`, and `#E-04` links continue to locate their projects.
 
