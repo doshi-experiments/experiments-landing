@@ -15,3 +15,7 @@ The `sheet-theme` preference uses a `.rishabhdoshi.com` cookie across public sit
 Serve `public/` with a local HTTP server, for example `python3 -m http.server 8080 --directory public`.
 
 Cloudflare deploys pushes to `main`. `wrangler.jsonc` declares `public/` as the asset directory. The site has no build step.
+
+## Licence
+
+MIT, see [LICENSE](LICENSE). The exception: the Host Grotesk font files in `public/design-system/fonts/` are under the SIL Open Font License 1.1 (`host-grotesk-OFL.txt` beside them).
