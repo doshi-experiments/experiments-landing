@@ -1,0 +1,12 @@
+/* The page's stylesheet: Tailwind CSS v4 with Felt's theme. components.css stays, in the
+   components layer, for the shared site header that site.js mounts. Everything else on the
+   page is utilities in index.html. */
+@import "tailwindcss" source(none);
+@source "../index.html";
+@import "@doshi-experiments/design-system/tailwind.css";
+@import "@doshi-experiments/design-system/components.css" layer(components);
+
+@layer base {
+  body {background-color: var(--ds-surface-page); color: var(--ds-text); font-family: var(--ds-font-body); line-height: 1.55}
+  a {color: var(--ds-action-link)}
+}

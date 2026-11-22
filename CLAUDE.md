@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-The experiments index at experiments.rishabhdoshi.com: one static page in `public/` listing the calculators, the visualizations and Mr. Shake. No build step; Cloudflare deploys `public/` on push to `main`. Author commits as `doshi-experiments <311927837+doshi-experiments@users.noreply.github.com>`.
+The experiments index at experiments.rishabhdoshi.com: one page listing the calculators, the visualizations and Mr. Shake, built with Vite and Tailwind CSS v4 into `dist/`, which Cloudflare deploys on push to `main`. Author commits as `doshi-experiments <311927837+doshi-experiments@users.noreply.github.com>`.
 
 ## Never publish PII or sensitive information
 
@@ -22,20 +22,22 @@ Use synthetic fixtures instead. Before every commit and push, check the staged d
 ## Commands
 
 ```sh
-python3 -m http.server 8080 --directory public
+npm ci
+npm run dev       # live preview
+npm run build     # Vite → dist/, which Cloudflare Workers Builds deploys
 ```
 
-CI re-verifies the hashes in `public/design-system/release.json`. The design-system repository's `scripts/check-index.mjs` covers this page in a browser (direct projects, legacy anchors, keyboard disclosures, overflow).
+CI runs `npm ci` (which checks the design-system tarball against the lockfile) and the build. The design-system repository's `scripts/check-index.mjs` covers this page in a browser (direct projects, legacy anchors, keyboard disclosures, overflow).
 
 ## Structure
 
-- `public/index.html` holds the real content, so the page works without JavaScript. `public/index-components.css` holds the page's own styles over the shared tokens.
-- `public/design-system/` is a generated snapshot of `@doshi-experiments/design-system`. Never edit it; upgrade through that repository's central `npm run rollout`.
+- `index.html` holds the real content and its Tailwind utilities, so the page works without JavaScript. `src/site.css` imports Tailwind, Felt's theme and `components.css` (for the shared header). `src/main.js` mounts the header and keeps the old anchors working. The unstyled `project`, `project-main`, `project-action` and `project-parts` classes are hooks for the design system's `check-index.mjs`; keep them.
+- The design system comes from the committed release tarball. Never edit it; upgrade through that repository's central `npm run rollout`. `vite.config.js` inlines `prepaint.js` with the shared plugin and ships the font licence.
 
 ## Rules
 
 - Each project gets a name, the fixed short description from the design system's `docs/identity.md`, and a literal action ("Open calculator"). Subpages go in a native `<details>` disclosure. Never advertise empty categories.
 - Keep the old `#E-01`, `#E-03` and `#E-04` anchors working.
-- Links and disclosure text use `--ds-action-link`; the signal (`--ds-action-gradient` / `--ds-action-primary`) is a fill, never text.
-- `public/design-system/prepaint.js` must load synchronously in `<head>` before styles. Keep the shared `sheet-theme` cookie scoped to `.rishabhdoshi.com`.
+- Links and disclosure text use `text-link` (`--ds-action-link`); the signal (`signal`, `--ds-action-gradient`) is a fill, never text. Tailwind's default palette and sizes don't exist; use Felt's utilities.
+- `prepaint.js` must run synchronously in `<head>` before styles; the Vite plugin does this, and fails the build if a stylesheet comes first. Keep the shared `sheet-theme` cookie scoped to `.rishabhdoshi.com`.
 - Projects open in the same tab.
